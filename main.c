@@ -8,9 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-
 typedef long long ll;
-
 #define TRUE  1
 #define FALSE 0
 
