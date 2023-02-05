@@ -16,6 +16,7 @@
 #include "copystr.h"
 #include "pastestr.h"
 #include "cutstr.h"
+#include "tree.h"
 
 void print_message(char *message) {
     printf("%s\n", message);
@@ -53,6 +54,8 @@ int main() {
             cutstr(command_rest);
         } else if (strcmp(command_main, "pastestr") == 0) {
             pastestr(command_rest);
+        } else if (strcmp(command_main, "tree") == 0) {
+            tree(command_rest);
         } else if (strcmp(command_main, "find") == 0) {
             print_message("404");
         } else if (strcmp(command_main, "help") == 0) {
