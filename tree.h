@@ -18,11 +18,11 @@ void recursive_tree(char *basepath, int round, int max) {
     //rest
     char path[1000];
     DIR *directory;
-    struct dirent *dir_entry;
+    struct dirent *dirEntry;
     struct stat statbuf;
     directory = opendir(basepath);
-    while ((dir_entry = readdir(directory)) != NULL) {
-        if (strcmp(dir_entry->d_name, ".") == 0 || strcmp(dir_entry->d_name, "..") == 0)
+    while ((dirEntry = readdir(directory)) != NULL) {
+        if (strcmp(dirEntry->d_name, ".") == 0 || strcmp(dirEntry->d_name, "..") == 0)
             continue;
         else {
             if (round > 0) {
@@ -32,12 +32,12 @@ void recursive_tree(char *basepath, int round, int max) {
                 for (int i = 0; i < 4; i++)
                     printf("-");
             }
-            printf("%s\n", dir_entry->d_name);
-            int mark = isFileExists(dir_entry->d_name);
+            printf("%s\n", dirEntry->d_name);
+            int mark = isFileExists(dirEntry->d_name);
             if (!mark) {
                 strcpy(path, basepath);
                 strcat(path, "/");
-                strcat(path, dir_entry->d_name);
+                strcat(path, dirEntry->d_name);
                 recursive_tree(path, round + 1, max);
             }
         }
@@ -51,7 +51,7 @@ void tree(char *input_rest_of_command) {
     if (number == -1)
         dpth = 30;
     else if (number < -1) {
-        print_message("[ERROR] Invalid depth!")
+        print_message("[ERROR] Invalid depth!")ک
     } else {
         dpth = number;
     }
