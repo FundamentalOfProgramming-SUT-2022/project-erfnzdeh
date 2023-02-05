@@ -8,7 +8,6 @@ typedef long long ll;
 void print_message(char *message);
 
 void removestr(const char *input_rest_of_command) {
-    char GRAND_STRING[1000];
     char rest_of_command[1000];
     char command_dash_dash_file[1000];
     char command_file[1000];
@@ -74,65 +73,90 @@ void removestr(const char *input_rest_of_command) {
     }
 //    printf("[removestr] [%s] [%s] [%s] [%d]:[%d] [%s] [%d] [%s]\n", command_dash_dash_file, path, command_dash_dash_pos, line_num, start_position, command_dash_dash_size, size, b_or_f);
 //    printf("[%s] [%d]:[%d] [%d] [%s]\n", path, line_num, start_position, size, b_or_f);
-    int checker = 0, flag = 1, file_pointer = 0;
-    char filetext[1000];
-    FILE *file = fopen(path, "r");
-    if (file == NULL) {
-        print_message("[ERROR] invalid address!");
+    if (fopen(path, "r") == 0) {
+        print_message("[ERROR] Invalid path!");
         return;
     }
-    for (int counter_line = 1; flag; counter_line++) {
-        for (int counter_char = 0; 1; counter_char++) {
-            //printf("line = %d, col = %d\n", counter_line, counter_char);
-            char c = fgetc(file);
-            filetext[file_pointer++] = c;
-            if (c == EOF) {
-                flag = 0;
-                break;
+    FILE *file;
+    file = fopen(path, "r");
+    int i = 1, j = 0;
+    char ch;
+    char all[1000] = {};
+    int x = 0;
+    if (strcmp(b_or_f, "-f") == 0) {
+        while (i != line_num || j != start_position) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR] Invalid position!");
+                fclose(file);
+                return;
             }
-            if (counter_line == line_num && counter_char == start_position) {
-                if (!strcmp(b_or_f, "-f")) {
-                    filetext[file_pointer--] = '\0';
-                    size--;
-                    while (size--) {
-                        c = fgetc(file);
-                        if (c == EOF) {
-                            break;
-                        }
-                    }
-                    if (c != EOF) {
-                        checker = 1;
-                    }
-                } else {
-                    while (size-- && file_pointer >= 0) {
-                        if (filetext[file_pointer] == '\n') {
-                        }
-                        filetext[file_pointer--] = '\0';
-                    }
-                    if (file_pointer >= 0) {
-                        checker = 1;
-                    }
-                }
-                flag = 0;
-                break;
+            j++;
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+            if (ch == '\n') {
+                i++;
+                j = 0;
             }
         }
+        for (int cnt = 0; cnt < size; cnt++) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR] Invalid size!");
+                fclose(file);
+                return;
+            }
+        }
+        while (1) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                break;
+            }
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+        }
+        fclose(file);
+        file = fopen(path, "w");
+        fprintf(file, "%s", all);
+        fclose(file);
+    } else if (strcmp(b_or_f, "-b") == 0) {
+        while (i != line_num || j != start_position) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR] Invalid position!");
+                fclose(file);
+                return;
+            }
+            j++;
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+            if (ch == '\n') {
+                i++;
+                j = 0;
+            }
+        }
+        all[strlen(all) - size] = '\0';
+        x -= size;
+        while (1) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                break;
+            }
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+        }
+        fclose(file);
+        file = fopen(path, "w");
+        fprintf(file, "%s", all);
+        fclose(file);
+    } else {
+        print_message("[ERROR] Invalid input! it's either '-b' or '-f', you know that right?");
+        fclose(file);
     }
-    char c = fgetc(file);
-    while (c != EOF) {
-        filetext[file_pointer++] = c;
-        c = fgetc(file);
-    }
-    fclose(file);
-    if (checker == 0) {
-        print_message("[ERROR] invalid position or size!");
-        return;
-    }
-    file = fopen(path, "w");
-    if (checker == 1) {
-        fprintf(file, "%s", filetext);
-    }
-    fclose(file);
     print_message("[DONE] Removed successfully!");
     return;
 }
