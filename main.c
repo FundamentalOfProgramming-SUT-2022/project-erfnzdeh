@@ -12,6 +12,7 @@
 #include "createfile.h"
 #include "cat.h"
 #include "insertstr.h"
+#include "removestr.h"
 
 void print_message(char *message) {
     printf("%s\n", message);
@@ -52,10 +53,6 @@ void goToRoot()
     chdir("..");
 }
 
-void removestr() {
-    printf("command = removestr\n");
-}
-
 void copystr() {
     printf("command = copystr\n");
 }
@@ -91,8 +88,8 @@ int main() {
             insertstr(command_rest);
         } else if (strcmp(command_main, "cat") == 0) {
             cat(command_rest);
-        } else if (strcmp(command_main, "removetstr") == 0) {
-            removestr();
+        } else if (strcmp(command_main, "removestr") == 0) {
+            removestr(command_rest);
         } else if (strcmp(command_main, "copy") == 0) {
             copystr();
         } else if (strcmp(command_main, "cut") == 0) {
@@ -105,7 +102,7 @@ int main() {
             printf("commands list: (Credit AidaJalali)\n");
             printf("createfile        |  createfile --file name_of_file\n");
             printf("cat               |  cat        --file name_of_file\n");
-            printf("insert            |  insert     --file name_of_file --str content --pos y:x\n");
+            printf("insert            |  insertstr  --file name_of_file --str content --pos y:x\n");
             printf("remove            |  removestr  --file name_of_file --pos y:x --size size f_b\n");
             printf("copy              |  copystr    --file name_of_file --pos y:x --size size f_b\n");
             printf("paste             |  pastestr   --file name_of_file --pos y:x                \n");
