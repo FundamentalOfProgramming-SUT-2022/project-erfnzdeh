@@ -71,4 +71,153 @@ void cutstr(char *input_rest_of_command) {
         path[i + 1] = '\0';
     }
     printf("[%s] [%d]:[%d] [%d] [%s]\n", path, line_num, start_position, size, b_or_f);
+//    copystr(path, line, point, size, type);
+    if (fopen(path, "r") == 0) {
+        print_message("[ERROR] file");
+        return;
+    }
+    FILE *file;
+    file = fopen(path, "r");
+    if (!(b_or_f[1] == 'f' || b_or_f[1] == 'b')) {
+        printf("%c\n", b_or_f[1]);
+        print_message("[ERROR] [ERROR] Invalid input! it's either '-b' or '-f', you know that right?");
+        return;
+    }
+    int i = 1, j = 0;
+    char ch;
+    char cpystr[10000] = {};
+    int x = 0;
+    if (b_or_f[1] == 'f') {
+        while (i != line_num || j != start_position) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR] Invalid position!");
+                fclose(file);
+                return;
+            }
+            j++;
+            if (ch == '\n') {
+                i++;
+                j = 0;
+            }
+        }
+        for (int counter = 0; counter < size; counter++) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR]");
+                fclose(file);
+                return;
+            }
+            cpystr[counter] = ch;
+            cpystr[counter + 1] = '\0';
+        }
+        fclose(file);
+        clipboard[0] = '\0';
+        strcpy(clipboard, cpystr);
+    } else {
+        while (i != line_num || j != start_position) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                printf("This Position Doesn't Exist!\n");
+                fclose(file);
+                return;
+            }
+            j++;
+            cpystr[x] = ch;
+            cpystr[x + 1] = '\0';
+            x++;
+            if (ch == '\n') {
+                i++;
+                j = 0;
+            }
+        }
+        memmove(&cpystr[0], &cpystr[strlen(cpystr) - size], size);
+        clipboard[0] = '\0';
+        strcpy(clipboard, cpystr);
+        fclose(file);
+    }
+    if (fopen(path, "r") == 0) {
+        print_message("[ERROR] Invalid path!");
+        return;
+    }
+    FILE *file;
+    file = fopen(path, "r");
+    int i = 1, j = 0;
+    char ch;
+    char all[1000] = {};
+    int x = 0;
+    if (strcmp(b_or_f, "-f") == 0) {
+        while (i != line_num || j != start_position) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR] Invalid position!");
+                fclose(file);
+                return;
+            }
+            j++;
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+            if (ch == '\n') {
+                i++;
+                j = 0;
+            }
+        }
+        for (int cnt = 0; cnt < size; cnt++) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR] Invalid size!");
+                fclose(file);
+                return;
+            }
+        }
+        while (1) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                break;
+            }
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+        }
+        fclose(file);
+        file = fopen(path, "w");
+        fprintf(file, "%s", all);
+        fclose(file);
+    } else if (strcmp(b_or_f, "-b") == 0) {
+        while (i != line_num || j != start_position) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                print_message("[ERROR] Invalid position!");
+                fclose(file);
+                return;
+            }
+            j++;
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+            if (ch == '\n') {
+                i++;
+                j = 0;
+            }
+        }
+        all[strlen(all) - size] = '\0';
+        x -= size;
+        while (1) {
+            ch = fgetc(file);
+            if (ch == EOF) {
+                break;
+            }
+            all[x] = ch;
+            all[x + 1] = '\0';
+            x++;
+        }
+        fclose(file);
+        file = fopen(path, "w");
+        fprintf(file, "%s", all);
+        fclose(file);
+    } else {
+        print_message("[ERROR] Invalid input! it's either '-b' or '-f', you know that right?");
+        fclose(file);
+    }
 }
