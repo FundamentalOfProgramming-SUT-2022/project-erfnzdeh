@@ -13,57 +13,14 @@
 #include "cat.h"
 #include "insertstr.h"
 #include "removestr.h"
+#include "copystr.h"
+#include "pastestr.h"
+#include "cutstr.h"
 
 void print_message(char *message) {
     printf("%s\n", message);
 }
 
-int isFileExists(const char *file_name) {
-    FILE *file;
-    if ((file = fopen(file_name, "r"))) {
-        fclose(file);
-        return 1;
-    }
-    return 0;
-}
-
-void goToAddress(char* address)
-{
-    char* token;
-    token = strtok(address, "/");
-    while(token != NULL)
-    {
-        mkdir(token);
-        chdir(token);
-        token = strtok(NULL, "/");
-    }
-}
-
-void goToRoot()
-{
-    char cwd[1000];
-    getcwd(cwd, 100);
-    int cwdsize = strlen(cwd);
-    while(cwd[cwdsize - 1] != 't' || cwd[cwdsize- 2 ] != 'o' || cwd[cwdsize - 3] != 'o' || cwd[cwdsize - 4] != 'r' || cwd[cwdsize - 5] != '/')
-    {
-        chdir("..");
-        getcwd(cwd, 100);
-        cwdsize = strlen(cwd);
-    }
-    chdir("..");
-}
-
-void copystr() {
-    printf("command = copystr\n");
-}
-
-void cutstr() {
-    printf("command = cutstr\n");
-}
-
-void pastestr() {
-    printf("command = pastestr\n");
-}
 //void find();
 //void compare();
 
@@ -90,14 +47,14 @@ int main() {
             cat(command_rest);
         } else if (strcmp(command_main, "removestr") == 0) {
             removestr(command_rest);
-        } else if (strcmp(command_main, "copy") == 0) {
-            copystr();
-        } else if (strcmp(command_main, "cut") == 0) {
-            cutstr();
+        } else if (strcmp(command_main, "copystr") == 0) {
+            copystr(command_rest);
+        } else if (strcmp(command_main, "cutstr") == 0) {
+            cutstr(command_rest);
         } else if (strcmp(command_main, "pastestr") == 0) {
-            pastestr();
+            pastestr(command_rest);
         } else if (strcmp(command_main, "find") == 0) {
-            // find();
+            print_message("404");
         } else if (strcmp(command_main, "help") == 0) {
             printf("commands list: (Credit AidaJalali)\n");
             printf("createfile        |  createfile --file name_of_file\n");
